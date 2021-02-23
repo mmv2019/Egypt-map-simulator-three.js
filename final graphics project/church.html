@@ -1,0 +1,140 @@
+<style>
+	.buttons {
+		position: fixed;
+		top: 20px;
+		right: 20px;
+	}
+	button {
+		margin-bottom: 6px;
+		width: 120px;
+		font-size: 14px;
+		outline: none;
+		background: #333;
+		color: #ddd;
+		border: none;
+		opacity: .5;
+	}
+	button:hover {
+		background: #222;
+		color: #eee;
+	}
+	.desc{
+		position: absolute;
+  bottom: 8px;
+  right: 16px;
+  background-color: #ddd;
+  opacity: .5;
+  padding: 20px 10px;
+	}
+	#p{
+	position: fixed;
+		top: 20px;
+		left: 20px;
+}
+</style>
+<div><button id="p" onclick="window.location='map.html';">map</button></div>
+<div class="buttons">
+	<button id="c" onclick="window.location='mmodel.html';">Cairo</button>
+	<button id="g" onclick="window.location='Pyramids.html';">Giza</button>
+	<button id="m" onclick="window.location='underwater.html';">Marsa Allam</button>
+	<button id="s" onclick="window.location='church.html';">Sharm El Sheikh</button>
+	<button id="n" onclick="window.location='canyon.html';">Nwebaa</button>
+	<button id="n" onclick="window.location='karnak.html';">Luxor</button>
+</div>
+
+<div class="desc">
+	<h2>The heavenly cathedral of Sharm-El-Sheikh:</h2>
+<h5>Marvel at St. John's vision of The Apocalypse at The Heavenly Cathedral, <br>
+<h5>  a Coptic cathedral perched on a hilltop. </h5>
+<h5>Built in 2010, the tall twin rectangular towers of the cathedral</h5>
+<h5> dominate the skyline with elegant architecture.  </h5>
+<h5> The church features elaborately painted ceiling and walls, </h5>
+<h5>lavishly illustrated with stories from the Bible and the lives 0f the saints. </h5>
+</div>
+<canvas id="scene"></canvas>
+<script src="three.min.js"></script>
+<script src="OrbitControls.js"></script>
+
+<script>
+
+//Get the height and the width of the window
+var ww = window.innerWidth,
+	wh = window.innerHeight;
+	
+    var c, sphere, cylinder, control;
+	
+function init(){
+
+	/* WEBGL RENDERER */
+
+	//Create the webGl renderer from Three
+	renderer = new THREE.WebGLRenderer({canvas : document.getElementById('scene')});
+	//Set the background of our scene
+	renderer.setClearColor(0xFFFFFF);
+    document.body.appendChild(renderer.domElement);
+	//Set the size of my renderer, I want it to be fullscreen
+	renderer.setSize(ww,wh);
+
+
+	/* SCENE */
+
+	//Create my scene
+	scene = new THREE.Scene();
+
+
+	/* CAMERA */
+
+	//Create a new Perspective Camera with four parameters
+	
+	camera = new THREE.PerspectiveCamera(100, ww/wh, 0.1, 10000 );
+	//We set our camera at x:0,y:0 and z:500
+	camera.position.set(100, 50, 100);
+	//And finally we add our camera in our scene
+	camera.lookAt(new THREE.Vector3(0,0,0));
+    scene.add(camera);
+
+
+        control = new THREE.OrbitControls( camera );
+
+	createcubes();
+
+	var light = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(light);
+
+    
+
+	//This is very important, it will ask the renderer to render our scene
+	renderer.render(scene,camera);
+
+	//call all the animation functions here
+    animate();
+};
+
+
+
+function createcubes()
+{
+let spheregeometry = new THREE.SphereGeometry(1000,32,32);
+                spheregeometry.scale(-1,1,1);
+                texture = new THREE.TextureLoader().load( 'images/church.jpg' );
+				let material = new THREE.MeshBasicMaterial( { map: texture } );
+				let spheremesh = new THREE.Mesh( spheregeometry, material );
+				spheremesh.position.y=-20;
+				scene.add( spheremesh );
+
+
+
+};
+
+
+    
+function animate()
+{
+    requestAnimationFrame(animate);  
+    renderer.render(scene,camera);
+    
+}
+
+
+init();
+</script>

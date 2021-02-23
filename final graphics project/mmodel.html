@@ -1,0 +1,220 @@
+<style>
+	.buttons {
+		position: fixed;
+		top: 20px;
+		right: 20px;
+	}
+	button {
+		margin-bottom: 6px;
+		width: 120px;
+		font-size: 14px;
+		outline: none;
+		background: #333;
+		color: #ddd;
+		border: none;
+		opacity: .5;
+	}
+	button:hover {
+		background: #222;
+		color: rgb(209, 209, 209);
+	}
+	.desc{
+		position: absolute;
+  bottom: 8px;
+  right: 16 px;
+  background-color: rgb(143, 204, 255);
+  opacity: .7;
+  padding: 10px 5px;
+	}
+	#p{
+	position: fixed;
+		top: 20px;
+		left: 20px;
+}
+</style>
+<div><button id="p" onclick="window.location='map.html';">map</button></div>
+<div class="buttons">
+	<button id="c" onclick="window.location='mmodel.html';">Cairo</button>
+	<button id="g" onclick="window.location='Pyramids.html';">Giza</button>
+	<button id="m" onclick="window.location='underwater.html';">Marsa Allam</button>
+	<button id="s" onclick="window.location='church.html';">Sharm El Sheikh</button>
+	<button id="n" onclick="window.location='canyon.html';">Nwebaa</button>
+	<button id="n" onclick="window.location='karnak.html';">Luxor</button>
+</div>
+<div class="desc">
+	<h1><b>Cairo Tower</b></h1>
+<h3><b> Cairo Tower is a free-standing concrete tower in Cairo, Egypt. At 187 m,</b> </h3>
+<h3>  it is the tallest structure in Egypt and North Africa. </h3>
+<h3> It was the tallest structure in Africa for ten years until 1971, </h3>
+<h3> when it was surpassed by Hillbrow Tower in South Africa. </h3>
+</div>
+<canvas id="scene"></canvas>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
+<script src="http://mamboleoo.be/learnThree/demos/OBJLoader.js"></script>
+<script src="OrbitControls.js"></script>
+<script src="MaterialLoader.js"></script>
+<script>
+
+//Get the height and the width of the window
+var ww = window.innerWidth,
+	wh = window.innerHeight;
+	
+    var c, sphere, cylinder, control;
+function init(){
+
+	/* WEBGL RENDERER */
+
+	//Create the webGl renderer from Three
+	renderer = new THREE.WebGLRenderer({canvas : document.getElementById('scene')});
+	//Set the background of our scene
+	renderer.setClearColor(0xFFFFFF);
+    document.body.appendChild(renderer.domElement);
+	//Set the size of my renderer, I want it to be fullscreen
+	renderer.setSize(ww,wh);
+
+
+	/* SCENE */
+
+	//Create my scene
+	scene = new THREE.Scene();
+/* CAMERA */
+
+	//Create a new Perspective Camera with four parameters
+	
+	camera = new THREE.PerspectiveCamera(50, ww/wh, 0.1, 200000 );
+	//We set our camera at x:0,y:0 and z:500
+	camera.position.set(0, -3000, -40000);
+	//And finally we add our camera in our scene
+	//camera.lookAt(new THREE.Vector3(0,0,0));
+    scene.add(camera);
+
+    control = new THREE.OrbitControls( camera );
+    
+  
+    backloader = new THREE.TextureLoader();
+scene.background = backloader.load( 'cairo.jpg' );      
+
+
+objectc = new THREE.Scene();
+  //Loader for Obj from Three.js
+  texture = new THREE.TextureLoader().load( 'images/cairotower.jpg' );
+material = new THREE.MeshBasicMaterial( { map: texture } );
+// material = new THREE.MeshBasicMaterial( { color:0xC0C0C0 } );
+var loader = new THREE.OBJLoader();
+loader.load( 'model/CairoTower.obj',
+    function( obj ){
+        obj.traverse( function( child ) {
+            if ( child instanceof THREE.Mesh ) {
+                child.material = material;
+            }
+		} );
+		obj.position.x=-40;
+    obj.position.y=-16999;
+		scene.add( obj );
+		//objectc.add(obj);
+});
+  /*
+ var objLoader = new THREE.OBJLoader();
+
+  //Launch loading of the obj file, addBananaInScene is the callback when it's ready 
+  objLoader.load('model/CairoTower.obj', function(object) {
+	objLoader.setMaterials('model/Cairotower.mtl') ;   
+    object.position.x=-40;
+    object.position.y=-16999;
+    scene.add(object);	renderer.render(scene,camera);
+});
+/*
+ var mtlLoader = new THREE.MaterialLoader();
+  objLoader.mtlload('model/Cairotower.mtl', (mtlParseResult) => {
+   materials =  MtlObjBridge.addMaterialsFromMtlLoader(mtlParseResult);
+    objLoader.addMaterials(materials);
+    objLoader.load('model/CairoTower.obj', (root) => {
+      scene.add(root); renderer.render(scene,camera);
+    });
+  });
+*/
+/*
+objLoader.loadMtl('https://threejsfundamentals.org/threejs/resources/models/windmill_2/windmill-fixed.mtl', null, (materials) => {
+      objLoader.setMaterials(materials);
+      objLoader.load('https://threejsfundamentals.org/threejs/resources/models/windmill_2/windmill.obj', (event) => {
+        const root = event.detail.loaderRootNode;
+        scene.add(root);
+		const box = new THREE.Box3().setFromObject(root);
+
+const boxSize = box.getSize(new THREE.Vector3()).length();
+const boxCenter = box.getCenter(new THREE.Vector3());
+
+// set the camera to frame the box
+frameArea(boxSize * 1.2, boxSize, boxCenter, camera);
+
+// update the Trackball controls to handle the new size
+controls.maxDistance = boxSize * 10;
+controls.target.copy(boxCenter);
+controls.update();
+});
+});*/
+
+/*
+
+const onProgress = function ( xhr ) {
+
+if ( xhr.lengthComputable ) {
+
+	const percentComplete = xhr.loaded / xhr.total * 100;
+	console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
+
+}
+
+};
+
+const onError = function () { };
+
+var mesh = null;
+
+var mtlLoader = new THREE.MaterialLoader();
+//mtlLoader.setPath( "https://threejs.org/examples/models/obj/walt/" );
+mtlLoader.load( 'model/Cairotower.mtl', function( materials ) {
+
+  materials.preload();
+
+  var objLoader = new THREE.OBJLoader();
+  objLoader.setMaterials( materials );
+  //objLoader.setPath( "https://threejs.org/examples/models/obj/walt/" );
+  objLoader.load( 'C:\Users\LENOVO\Desktop\graphics project\3dobject\model\CairoTower.obj', function ( object ) {
+
+    mesh = object;
+    mesh.position.y = -50;
+    scene.add( mesh );
+
+  } ,onProgress,onError);
+
+} ,onProgress,onError );
+*/
+	var light = new THREE.AmbientLight(0xffffff, 0.5);
+	scene.add(light);
+	
+
+    
+
+	//This is very important, it will ask the renderer to render our scene
+	renderer.render(scene,camera);
+
+	//call all the animation functions here
+ animate();
+};
+
+   
+function animate()
+{
+    requestAnimationFrame(animate);  
+    renderer.render(scene,camera);
+    
+}
+
+
+
+
+
+init();
+</script>

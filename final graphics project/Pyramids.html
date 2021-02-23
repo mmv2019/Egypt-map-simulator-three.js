@@ -1,0 +1,291 @@
+<style>
+	.buttons {
+		position: fixed;
+		top: 20px;
+		right: 20px;
+	}
+	button {
+		margin-bottom: 6px;
+		width: 120px;
+		font-size: 14px;
+		outline: none;
+		background: #333;
+		color: #ddd;
+		border: none;
+		opacity: .5;
+	}
+	button:hover {
+		background: #222;
+		color: #eee;
+	}
+	#p{
+	position: fixed;
+		top: 20px;
+		left: 20px;
+}
+</style>
+<div><button id="p" onclick="window.location='map.html';">map</button></div>
+<div class="buttons">
+	<button id="c" onclick="window.location='mmodel.html';">Cairo</button>
+	<button id="g" onclick="window.location='Pyramids.html';">Giza</button>
+	<button id="m" onclick="window.location='underwater.html';">Marsa Allam</button>
+	<button id="s" onclick="window.location='church.html';">Sharm El Sheikh</button>
+	<button id="n" onclick="window.location='canyon.html';">Nwebaa</button>
+	<button id="n" onclick="window.location='karnak.html';">Luxor</button>
+</div>
+
+<canvas id="scene"></canvas>
+<script src="three.min.js"></script>
+<script src="http://mamboleoo.be/learnThree/demos/OBJLoader.js"></script>
+<script src="OrbitControls.js"></script>
+
+<script>
+
+//Get the height and the width of the window
+var ww = window.innerWidth,
+	wh = window.innerHeight;
+	
+	var c1,c2,c3, cylinder, control;
+	
+function init(){
+
+	//Create the webGl renderer from Three
+	renderer = new THREE.WebGLRenderer({canvas : document.getElementById('scene')});
+	//Set the background of our scene
+	renderer.setClearColor(0x000000);
+	document.body.appendChild(renderer.domElement);
+	
+	//Set the size of my renderer, I want it to be fullscreen
+	renderer.setSize(ww,wh);
+
+
+	/* SCENE */
+
+	//Create my scene
+	scene = new THREE.Scene();
+
+
+	/* CAMERA */
+
+	
+	camera = new THREE.PerspectiveCamera(40, ww/wh, 0.1, 200000 );
+	//We set our camera at x:0,y:0 and z:500
+	camera.position.set(900, -800, 40000);
+	//And finally we add our camera in our scene
+	/*		obj.position.x=-9000;
+		obj.position.z=32000;
+		obj.position.y=-1700;*/
+	//camera.lookAt(new THREE.Vector3(-9000,32000,-1700));
+    scene.add(camera);
+
+
+        control = new THREE.OrbitControls( camera );
+  
+
+	//Create all shapes in the scene
+	createcubes();
+	// var light = new THREE.AmbientLight(0xffffff, 0.5);
+	// scene.add(light)
+	
+	const light = new THREE.PointLight( 0xff0000, 1, 100 );
+light.position.set( 50, 50, 50 );
+scene.add( light );
+
+
+
+	//This is very important, it will ask the renderer to render our scene
+	renderer.render(scene,camera);
+	//background
+	const loader = new THREE.TextureLoader();
+    scene.background = loader.load( 'images/pyramid2.jpg' );
+
+	window.addEventListener("mousemove", click);
+	//call all the animation functions here
+    animate();
+};
+
+function createcubes()
+{
+	
+
+	cubes = new THREE.Object3D();
+	cubes1 = new THREE.Object3D();
+	cubes2 = new THREE.Object3D();
+	box = new THREE.Object3D();
+//right
+const cgeometry1 = new THREE.CylinderGeometry( 0, 3520,3550, 4 );
+var cMaterial = new THREE.MeshBasicMaterial();
+ cMaterial.map = THREE.ImageUtils.loadTexture('images/architecture.jpg') // adding textures for pyramid
+c1 = new THREE.Mesh(cgeometry1, cMaterial );
+c1.position.x=20000;  
+c1.position.y=-3990;
+c1.position.z=-290;
+scene.add( c1 );
+
+//left
+const cgeometry3 = new THREE.CylinderGeometry( 0, 4820,4850, 4 );
+var cMaterial = new THREE.MeshBasicMaterial();
+cMaterial.map = THREE.ImageUtils.loadTexture('images/architecture.jpg') // adding textures for pyramid
+c2 = new THREE.Mesh( cgeometry3, cMaterial);
+c2.position.x=-2820;
+c2.position.y=-3500;
+c2.position.z=-3100;
+scene.add( c2 );
+
+//nos
+const cgeometry4 = new THREE.CylinderGeometry(0, 7520,7550, 4 );
+var cMaterial = new THREE.MeshBasicMaterial();
+cMaterial.map = THREE.ImageUtils.loadTexture('images/architecture.jpg') // adding textures for pyramid
+c3 = new THREE.Mesh( cgeometry4,cMaterial );
+c3.position.x=7500; 
+c3.position.y=-2000;
+c3.position.z=7500;
+scene.add( c3 );
+
+cubes.add(c1);
+
+cubes1.add(c2);
+
+cubes2.add(c3);
+
+
+
+
+	
+var objLoader = new THREE.OBJLoader();
+
+//Launch loading of the obj file, addBananaInScene is the callback when it's ready 
+texture = new THREE.TextureLoader().load( 'model/sphinx.jpg' );
+material = new THREE.MeshBasicMaterial( { map: texture } );
+  //var ship_material = new THREE.MeshBasicMaterial( { color: 0xffffffff } );
+
+objLoader.load( 'model/sphinx.obj',
+    function( obj ){
+        obj.traverse( function( child ) {
+            if ( child instanceof THREE.Mesh ) {
+                child.material = material;
+            }
+		} );
+		obj.position.x=-2500;
+		obj.position.z=32000;
+		obj.position.y=-1700;
+		obj.rotation.x=300;
+		obj.rotation.z=-100;
+		//obj.scale.set(1,1,1);
+		scene.add( obj );
+		box.add(obj);
+});
+
+
+
+scene.add(box);
+scene.add(cubes);
+scene.add(cubes1);
+scene.add(cubes2);
+};
+
+
+    
+function animate()
+{
+	requestAnimationFrame(animate);  
+	renderer.render(scene,camera);
+	//render();
+
+	//click(e);
+    
+}
+function click(e){
+	//We create a 2D vector
+	vector = new THREE.Vector2();
+	//We set its position where the user clicked and we convert it to a number between -1 & 1
+	vector.set(
+		2 * (e.clientX / ww) - 1,
+		1 - 2 * (e.clientY / wh )
+	);
+
+	//We create a raycaster, which is some kind of laser going through your scene
+	raycaster = new THREE.Raycaster();
+	//We apply two parameters to the 'laser', its origin (where the user clicked) and the direction (what the camera 'sees')
+	raycaster.setFromCamera(vector,camera);
+
+	//We get all the objects the 'laser' find on its way (it returns an array containing the objects)
+	intersects = raycaster.intersectObjects(cubes.children);
+
+	//If detect that we have at least 1 object
+	//The first object in the array is the closest to the camera
+
+//mankr3	
+	if(intersects.length > 0 ){
+geometry = new THREE.BoxGeometry(300,500,20);
+ texture = new THREE.TextureLoader().load( 'images/Menkaure.png' );
+				let gizamaterial = new THREE.MeshBasicMaterial( { map: texture } );
+sphere1= new THREE.Mesh(geometry, gizamaterial);
+ sphere1.position.x=2000;
+ sphere1.position.y=-300;
+  sphere1.position.z=36790;
+scene.add(sphere1);
+renderer.render(scene,camera);}
+
+//5fr3
+	intersects2 = raycaster.intersectObjects(cubes1.children);
+	if(intersects2.length > 0 ){	
+///////////////////////////////////////////////////////////////////
+geometry = new THREE.BoxGeometry(300,500,20);
+ texture = new THREE.TextureLoader().load( 'images/khafra.png' );
+				let gizamaterial1 = new THREE.MeshBasicMaterial( { map: texture } );
+sphere2= new THREE.Mesh(geometry, gizamaterial1);
+ sphere2.position.x=520;
+ sphere2.position.y=-300;
+  sphere2.position.z=36790;
+scene.add(sphere2);renderer.render(scene,camera);
+}
+//5ofo
+	intersects3= raycaster.intersectObjects(cubes2.children);
+	if(intersects3.length > 0 ){
+// ////////////////////////////////////////////////////////////////////
+geometry = new THREE.BoxGeometry(300,500,20);
+ texture = new THREE.TextureLoader().load( 'images/khufu.png'  );
+				let gizamaterial3 = new THREE.MeshBasicMaterial( { map: texture } );
+sphere3= new THREE.Mesh(geometry, gizamaterial3);
+sphere3.position.x=1200;
+sphere3.position.y=-300;
+sphere3.position.z=36790;
+scene.add(sphere3);
+		//We render our scene
+	renderer.render(scene,camera);
+	}
+	
+	
+	intersects4= raycaster.intersectObjects(box.children);
+	if(intersects4.length > 0 ){
+// ////////////////////////////////////////////////////////////////////
+geometry = new THREE.BoxGeometry(300,500,20);
+ texture = new THREE.TextureLoader().load( 'images/Menkaure.png' );
+let gizamaterial4 = new THREE.MeshBasicMaterial( { map: texture } );
+sphere5= new THREE.Mesh(geometry, gizamaterial4);
+sphere5.position.x=2000;
+sphere5.position.y=-300;
+sphere5.position.z=26790;
+scene.add(sphere5);
+		//We render our scene
+	renderer.render(scene,camera);
+	}
+	
+	
+	renderer.render(scene,camera);
+};
+
+
+
+	function render() {
+	c1.rotation.y += 0.01;
+	c2.rotation.y += 0.01;
+	c3.rotation.y += 0.01;
+    quaternion.setFromAxisAngle(axis, 0.001);
+	renderer.render(scene, camera);
+	
+  }
+
+init();
+</script>

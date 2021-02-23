@@ -1,0 +1,92 @@
+<!-- My scene -->
+<canvas id="scene"></canvas>
+<script src="three.min.js"></script>
+<script src="OrbitControls.js"></script>
+
+<script>
+
+//Get the height and the width of the window
+var ww = window.innerWidth,
+	wh = window.innerHeight;
+	
+    var c, sphere, cylinder, control;
+function init(){
+
+	/* WEBGL RENDERER */
+
+	//Create the webGl renderer from Three
+	renderer = new THREE.WebGLRenderer({canvas : document.getElementById('scene')});
+	//Set the background of our scene
+	renderer.setClearColor(0xFFFFFF);
+    document.body.appendChild(renderer.domElement);
+	//Set the size of my renderer, I want it to be fullscreen
+	renderer.setSize(ww,wh);
+
+
+	/* SCENE */
+
+	//Create my scene
+	scene = new THREE.Scene();
+
+
+	/* CAMERA */
+
+	//Create a new Perspective Camera with four parameters
+	
+	camera = new THREE.PerspectiveCamera(100, ww/wh, 0.1, 10000 );
+	//We set our camera at x:0,y:0 and z:500
+	camera.position.set(100, 50, 100);
+	//And finally we add our camera in our scene
+	camera.lookAt(new THREE.Vector3(0,0,0));
+    scene.add(camera);
+
+
+        control = new THREE.OrbitControls( camera );
+  
+
+	//Create all shapes in the scene
+	createcubes();
+
+	var light = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(light);
+
+    
+
+	//This is very important, it will ask the renderer to render our scene
+	renderer.render(scene,camera);
+
+	//call all the animation functions here
+    animate();
+};
+
+
+
+function createcubes()
+{
+
+
+let spheregeometry = new THREE.SphereGeometry(1000,32,32);
+                spheregeometry.scale(-1,1,1);
+                texture = new THREE.TextureLoader().load( 'images/rasmohamed.jpg' );
+				let material = new THREE.MeshBasicMaterial( { map: texture } );
+				let spheremesh = new THREE.Mesh( spheregeometry, material );
+				scene.add( spheremesh );
+
+
+
+};
+
+
+    
+function animate()
+{
+    requestAnimationFrame(animate);  
+    renderer.render(scene,camera);
+    
+}
+
+
+
+
+init();
+</script>

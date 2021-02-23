@@ -1,0 +1,356 @@
+<style>
+	.buttons {
+		position: fixed;
+		top: 20px;
+		right: 20px;
+	}
+	button {
+		margin-bottom: 6px;
+		width: 120px;
+		font-size: 14px;
+		outline: none;
+		background: #333;
+		color: #ddd;
+		border: none;
+		opacity: .5;
+	}
+	button:hover {
+		background: #222;
+		color: #eee;
+	}
+</style>
+<div class="buttons">
+	<button id="c" onclick="window.location='mmodel.html';">Cairo</button>
+	<button id="g" onclick="window.location='Pyramids.html';">Giza</button>
+	<button id="m" onclick="window.location='underwater.html';">Marsa Allam</button>
+	<button id="s" onclick="window.location='church.html';">Sharm El Sheikh</button>
+	<button id="n" onclick="window.location='canyon.html';">Nwebaa</button>
+	<button id="n" onclick="window.location='karnak.html';">Luxor</button>
+	
+</div>
+
+<script src="three.min.js"></script>
+<script src="OrbitControls.js"></script>
+
+
+
+<canvas id="scene"></canvas>
+
+
+<script>
+
+//Get the height and the width of the window
+var ww = window.innerWidth,
+	wh = window.innerHeight;
+	
+    var c, sphere, cylinder, control;
+function init(){
+
+	/* WEBGL RENDERER */
+
+	//Create the webGl renderer from Three
+	renderer = new THREE.WebGLRenderer({canvas : document.getElementById('scene')});
+	//Set the background of our scene
+	renderer.setClearColor(0x000000);
+    document.body.appendChild(renderer.domElement);
+	//Set the size of my renderer, I want it to be fullscreen
+	renderer.setSize(ww,wh);
+
+
+	/* SCENE */
+
+	//Create my scene
+	scene = new THREE.Scene();
+
+
+	/* CAMERA */
+
+	//Create a new Perspective Camera with four parameters
+	
+	camera = new THREE.PerspectiveCamera(100, ww/wh, 1, 500 );
+	//We set our camera at x:0,y:0 and z:500
+	camera.position.set(0,0, 100);
+	//And finally we add our camera in our scene
+	camera.lookAt(new THREE.Vector3(0,0,0));
+    scene.add(camera);
+
+
+        control = new THREE.OrbitControls( camera );
+  
+
+	//Create all shapes in the scene
+	createcubes();
+ 
+	//createcyl();
+	var light = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(light);
+
+    
+
+	//This is very important, it will ask the renderer to render our scene
+	renderer.render(scene,camera);
+   window.addEventListener("mousemove", click);
+	//call all the animation functions here
+    animate();
+};
+
+
+function createcubes()
+{
+ 				boxgeometry = new THREE.BoxGeometry(395,200,40);
+                texture = new THREE.TextureLoader().load( 'images/egypt_map.jpg' );
+				let materiall = new THREE.MeshBasicMaterial( { map: texture } );
+				let box = new THREE.Mesh( boxgeometry, materiall );
+				scene.add( box );
+
+giza = new THREE.Object3D();
+	geometry = new THREE.SphereGeometry(2,50,50);
+	texture = new THREE.MeshLambertMaterial({color:0xffffff });
+  cube = new THREE.Mesh(geometry, texture);
+  cube.position.x=18.5;
+  cube.position.y=50;
+  cube.position.z=25;
+giza.add(cube);
+scene.add(giza);
+
+cairo = new THREE.Object3D();
+	geometry = new THREE.SphereGeometry(2,50,50);
+	texture = new THREE.MeshLambertMaterial({color:0x0000ff });
+  disc = new THREE.Mesh(geometry, texture);
+  disc.position.x=28;
+  disc.position.y=50;
+  disc.position.z=25;
+cairo.add(disc);
+scene.add(cairo);
+
+luxor= new THREE.Object3D();
+	geometry = new THREE.SphereGeometry(2,50,50);
+	texture = new THREE.MeshLambertMaterial({color:0xf20c00 });
+  sphere = new THREE.Mesh(geometry, texture);
+  sphere.position.x=75;
+  sphere.position.y=-30;
+  sphere.position.z=25;
+luxor.add(sphere);
+scene.add(luxor);
+
+
+
+sharm= new THREE.Object3D();
+	geometry = new THREE.SphereGeometry(2,50,50);
+	texture = new THREE.MeshLambertMaterial({color:0xff0081});
+  sphere2 = new THREE.Mesh(geometry, texture);
+  sphere2.position.x=109.9;
+  sphere2.position.y=19;
+  sphere2.position.z=25;
+sharm.add(sphere2);
+scene.add(sharm);
+
+
+
+nwebaa= new THREE.Object3D();
+	geometry = new THREE.SphereGeometry(2,50,50);
+	texture = new THREE.MeshLambertMaterial({color:0xa8ff8f });
+ sphere3 = new THREE.Mesh(geometry, texture);
+ sphere3.position.x=120;
+ sphere3.position.y=35;
+ sphere3.position.z=25;
+nwebaa.add(sphere3);
+scene.add(nwebaa);
+
+
+
+marsa= new THREE.Object3D();
+	geometry = new THREE.SphereGeometry(2,50,50);
+	texture = new THREE.MeshLambertMaterial({color:0x00000 });
+ sphere4= new THREE.Mesh(geometry, texture);
+ sphere4.position.x=100.9;
+ sphere4.position.y=-3;
+ sphere4.position.z=25;
+marsa.add(sphere4);
+scene.add(marsa);
+
+
+renderer.render(scene,camera);
+};
+
+
+    
+function animate()
+{
+    requestAnimationFrame(animate);  
+    renderer.render(scene,camera);
+    
+};
+
+function GIZA()
+{
+geometry = new THREE.BoxGeometry(30,50,0.1);
+ texture = new THREE.TextureLoader().load( 'images/Giza.png' );
+material = new THREE.MeshBasicMaterial( { map: texture } );
+sphere5= new THREE.Mesh(geometry, material);
+sphere5.position.x=35;
+sphere5.position.y=35;
+sphere5.position.z=40;
+scene.add(giza);
+scene.add(sphere5);
+renderer.render(scene,camera);
+}
+
+function CAIRO()
+{
+geometry = new THREE.BoxGeometry(30,50,0.1);
+ texture = new THREE.TextureLoader().load( 'images/cairo.png' );
+material = new THREE.MeshBasicMaterial( { map: texture } );
+sphere6= new THREE.Mesh(geometry, material);
+sphere6.position.x=45;
+sphere6.position.y=35;
+sphere6.position.z=40;
+scene.add(cairo);
+scene.add(sphere6);
+renderer.render(scene,camera);
+}
+
+
+function SHARM(){
+geometry = new THREE.BoxGeometry(30,50,0.1);
+texture = new THREE.TextureLoader().load( 'images/Sharm.png' );
+gizamaterial = new THREE.MeshBasicMaterial( { map: texture } );
+sphere1= new THREE.Mesh(geometry, gizamaterial);
+sphere1.position.x=78;
+sphere1.position.y=45;
+sphere1.position.z=40;
+scene.add(sharm);
+scene.add(sphere1);
+renderer.render(scene,camera);
+}
+
+function LUXOR(){
+geometry = new THREE.BoxGeometry(30,50,0.1);
+texture = new THREE.TextureLoader().load( 'images/luxor.png' );
+gizamaterial = new THREE.MeshBasicMaterial( { map: texture } );
+sphere= new THREE.Mesh(geometry, gizamaterial);
+sphere.position.x=45;
+sphere.position.y=-35;
+sphere.position.z=40;
+scene.add(sphere);
+scene.add(luxor);
+renderer.render(scene,camera);
+}
+
+function NWEBAA()
+{
+geometry = new THREE.BoxGeometry(30,50,0.1);
+texture = new THREE.TextureLoader().load( 'images/nuweiba.png' );
+gizamaterial = new THREE.MeshBasicMaterial( { map: texture } );
+sphere= new THREE.Mesh(geometry, gizamaterial);
+sphere.position.x=115.5;
+sphere.position.y=35;
+sphere.position.z=40;
+scene.add(sphere);
+scene.add(luxor);
+renderer.render(scene,camera);
+}
+function MARSA(){
+geometry = new THREE.BoxGeometry(30,50,0.1);
+texture = new THREE.TextureLoader().load( 'images/marsa alam.png' );
+gizamaterial = new THREE.MeshBasicMaterial( { map: texture } );
+sphere= new THREE.Mesh(geometry, gizamaterial);
+sphere.position.x=95;
+sphere.position.y=-15;
+sphere.position.z=40;
+scene.add(sphere);
+scene.add(marsa);
+renderer.render(scene,camera);
+}
+
+function click(e){
+	//We create a 2D vector
+	vector = new THREE.Vector2();
+	//We set its position where the user clicked and we convert it to a number between -1 & 1
+	vector.set(
+		2 * (e.clientX / ww) - 1,
+		1 - 2 * (e.clientY / wh )
+	);
+
+	//We create a raycaster, which is some kind of laser going through your scene
+	raycaster = new THREE.Raycaster();
+	//We apply two parameters to the 'laser', its origin (where the user clicked) and the direction (what the camera 'sees')
+	raycaster.setFromCamera(vector,camera);
+
+	intersectss = raycaster.intersectObjects(sharm.children);
+	if(intersectss.length > 0 ){
+	while(scene.children.length > 0){ 
+    scene.remove(scene.children[0]); 
+	}
+	createcubes();
+	SHARM();
+		renderer.render(scene,camera);
+	}
+
+	intersect_cairo = raycaster.intersectObjects(cairo.children);
+	if(intersect_cairo.length > 0 ){
+	while(scene.children.length > 0){ 
+    scene.remove(scene.children[0]); 
+	}
+	createcubes();
+	CAIRO();
+		renderer.render(scene,camera);
+	}
+
+
+
+	intersects = raycaster.intersectObjects(giza.children);
+	if(intersects.length > 0 ){
+		while(scene.children.length > 0){ 
+    scene.remove(scene.children[0]); 
+    }
+	createcubes();
+	GIZA();
+		renderer.render(scene,camera);
+	}
+	
+
+
+
+intersect = raycaster.intersectObjects(luxor.children);
+	if(intersect.length > 0 ){
+	while(scene.children.length > 0){ 
+    scene.remove(scene.children[0]); 
+    }
+	createcubes();
+	LUXOR();
+		renderer.render(scene,camera);
+	}
+
+
+intersect2 = raycaster.intersectObjects(nwebaa.children);
+	if(intersect2.length > 0 ){
+	while(scene.children.length > 0){ 
+    scene.remove(scene.children[0]); 
+    }
+	createcubes();
+	NWEBAA();
+		renderer.render(scene,camera);
+	}
+
+
+intersect3= raycaster.intersectObjects(marsa.children);
+	if(intersect3.length > 0 ){
+	while(scene.children.length > 0){ 
+    scene.remove(scene.children[0]); 
+    }
+	createcubes();
+	MARSA();
+		renderer.render(scene,camera);
+	}	
+	renderer.render(scene,camera);
+
+};
+
+
+
+
+//Init our scene
+init();
+
+</script>

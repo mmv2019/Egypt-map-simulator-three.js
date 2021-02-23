@@ -1,0 +1,764 @@
+<style>
+	.buttons {
+		position: fixed;
+		top: 20px;
+		right: 20px;
+	}
+	button {
+		margin-bottom: 6px;
+		width: 120px;
+		font-size: 14px;
+		outline: none;
+		background: #333;
+		color: #ddd;
+		border: none;
+		opacity: .5;
+	}
+	button:hover {
+		background: #222;
+		color: #eee;
+	}
+    #p{
+	position: fixed;
+		top: 20px;
+		left: 20px;
+}
+</style>
+<div><button id="p" onclick="window.location='map.html';">map</button></div>
+<div class="buttons">
+	<button id="c" onclick="window.location='mmodel.html';">Cairo</button>
+	<button id="g" onclick="window.location='Pyramids.html';">Giza</button>
+	<button id="m" onclick="window.location='underwater.html';">Marsa Allam</button>
+	<button id="s" onclick="window.location='church.html';">Sharm El Sheikh</button>
+	<button id="n" onclick="window.location='canyon.html';">Nwebaa</button>
+    <button id="n" onclick="window.location='karnak.html';">Luxor</button>
+</div>
+
+<canvas id="scene"></canvas>
+<script src="three.min.js"></script>
+<script src="OrbitControls.js"></script>
+
+<script>
+
+//Get the height and the width of the window
+var ww = window.innerWidth,
+	wh = window.innerHeight;
+	
+    var c, sphere, cylinder, control;
+function init(){
+
+	/* WEBGL RENDERER */
+
+	//Create the webGl renderer from Three
+	renderer = new THREE.WebGLRenderer({canvas : document.getElementById('scene')});
+	//Set the background of our scene
+	renderer.setClearColor(0xffffff);
+    document.body.appendChild(renderer.domElement);
+	//Set the size of my renderer, I want it to be fullscreen
+	renderer.setSize(ww,wh);
+
+
+	/* SCENE */
+
+	//Create my scene
+	scene = new THREE.Scene();
+
+
+	/* CAMERA */
+
+	//Create a new Perspective Camera with four parameters
+	
+	camera = new THREE.PerspectiveCamera(45, ww/wh, 0.1, 500 );
+	//We set our camera at x:0,y:0 and z:500
+	camera.position.set(0,0, 70);
+	//And finally we add our camera in our scene
+	camera.lookAt(new THREE.Vector3(0,0,0));
+    scene.add(camera);
+
+
+        control = new THREE.OrbitControls( camera );
+  
+
+	//Create all shapes in the scene
+	createcubes();
+ 
+	//createcyl();
+	var light = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(light);
+
+    const loader = new THREE.TextureLoader();
+    scene.background = loader.load( 'images/background.jpg' );
+
+
+    
+
+	//This is very important, it will ask the renderer to render our scene
+	renderer.render(scene,camera);
+   window.addEventListener("mousemove", click);
+	//call all the animation functions here
+    animate();
+};
+
+
+function createcubes()
+{
+
+    var material = new THREE.MeshBasicMaterial();
+material.map = THREE.ImageUtils.loadTexture('images/texture2.jpg'); 
+
+var brick = new THREE.MeshBasicMaterial();
+brick.map = THREE.ImageUtils.loadTexture('images/sand.jpg'); 
+
+var tile = new THREE.MeshBasicMaterial();
+tile.map = THREE.ImageUtils.loadTexture('images/tile.jpg'); 
+
+    //texture = new THREE.TextureLoader().load( 'texture1.jpeg' );
+    //          let material = new THREE.MeshBasicMaterial( { map: texture } );
+
+
+    // ************************** //
+    // COLUMNS
+    // ************************** //
+
+
+
+    // el wara
+    const cylGEOM = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+
+    const cylinder = new THREE.Mesh( cylGEOM, material );
+    cylinder.name = "cylinder";
+    cylinder.position.x=3;
+    cylinder.position.y=-2;
+    cylinder.position.z=-20;
+    scene.add(cylinder);
+    const dayraGEOM = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayra = new THREE.Mesh( dayraGEOM, material );
+    dayra.name = "dayra";
+    dayra.position.x=3;
+    dayra.position.y=-7;
+    dayra.position.z=-20;
+    scene.add(dayra);
+    const circleGEOM = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circle = new THREE.Mesh( circleGEOM, material );
+    circle.name = "circle";
+    circle.position.x=3;
+    circle.position.y=3;
+    circle.position.z=-20;
+    scene.add(circle);
+    const cubegeometry = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cube = new THREE.Mesh( cubegeometry, material );
+    cube.position.x=3;
+    cube.position.y=3.8;
+    cube.position.z=-20;
+    scene.add( cube );
+
+    
+
+
+   
+    const cylGEOM2 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylinder2 = new THREE.Mesh( cylGEOM2, material );
+    cylinder2.name = "cylinder2";
+    cylinder2.position.x=-3;
+    cylinder2.position.y=-2;
+    cylinder2.position.z=-20;
+    scene.add(cylinder2);
+    const dayraGEOM2 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayra2 = new THREE.Mesh( dayraGEOM2, material );
+    dayra2.name2 = "dayra2";
+    dayra2.position.x=-3;
+    dayra2.position.y=-7;
+    dayra2.position.z=-20;
+    scene.add(dayra2);
+    const circleGEOM2 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circle2 = new THREE.Mesh( circleGEOM2, material );
+    circle2.name = "circle2";
+    circle2.position.x=-3;
+    circle2.position.y=3;
+    circle2.position.z=-20;
+    scene.add(circle2);
+    const cubegeometry2 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cube2 = new THREE.Mesh( cubegeometry2, material );
+    cube2.position.x=-3;
+    cube2.position.y=3.8;
+    cube2.position.z=-20;
+    scene.add( cube2 );
+
+    
+    
+    
+  
+   
+    const cylGEOM3 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylinder3 = new THREE.Mesh( cylGEOM3, material );
+    cylinder3.name = "cylinder3";
+    cylinder3.position.x=-9;
+    cylinder3.position.y=-2;
+    cylinder3.position.z=-20;
+    scene.add(cylinder3);
+    const dayraGEOM3 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayra3 = new THREE.Mesh( dayraGEOM2, material );
+    dayra3.name3 = "dayra3";
+    dayra3.position.x=-9;
+    dayra3.position.y=-7;
+    dayra3.position.z=-20;
+    scene.add(dayra3);
+    const circleGEOM3 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circle3 = new THREE.Mesh( circleGEOM3, material );
+    circle3.name = "circle3";
+    circle3.position.x=-9;
+    circle3.position.y=3;
+    circle3.position.z=-20;
+    scene.add(circle3);
+    const cubegeometry3 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cube3 = new THREE.Mesh( cubegeometry3, material );
+    cube3.position.x=-9;
+    cube3.position.y=3.8;
+    cube3.position.z=-20;
+    scene.add( cube3 );
+
+    
+
+
+
+    const cylGEOM4 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylMAT4 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const cylinder4 = new THREE.Mesh( cylGEOM4, material );
+    cylinder4.name = "cylinder4";
+    cylinder4.position.x=9;
+    cylinder4.position.y=-2;
+    cylinder4.position.z=-20;
+    scene.add(cylinder4);
+    const dayraGEOM4 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayra4 = new THREE.Mesh( dayraGEOM4, material);
+    dayra4.name4 = "dayra4";
+    dayra4.position.x=9;
+    dayra4.position.y=-7;
+    dayra4.position.z=-20;
+    scene.add(dayra4);
+    const circleGEOM4 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circle4 = new THREE.Mesh( circleGEOM2, material );
+    circle4.name = "circle4";
+    circle4.position.x=9;
+    circle4.position.y=3;
+    circle4.position.z=-20;
+    scene.add(circle4);
+    const cubegeometry4 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cube4 = new THREE.Mesh( cubegeometry4, material );
+    cube4.position.x=9;
+    cube4.position.y=3.8;
+    cube4.position.z=-20;
+    scene.add( cube4 );
+
+
+
+    const cylGEOM9 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylinder9 = new THREE.Mesh( cylGEOM9, material );
+    cylinder9.name = "cylinder9";
+    cylinder9.position.x=15;
+    cylinder9.position.y=-2;
+    cylinder9.position.z=-20;
+    scene.add(cylinder9);
+    const dayraGEOM9 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayra9 = new THREE.Mesh( dayraGEOM9, material );
+    dayra9.name = "dayra9";
+    dayra9.position.x=15;
+    dayra9.position.y=-7;
+    dayra9.position.z=-20;
+    scene.add(dayra9);
+    const circleGEOM9 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circle9 = new THREE.Mesh( circleGEOM9, material );
+    circle9.name = "circle9";
+    circle9.position.x=15;
+    circle9.position.y=3;
+    circle9.position.z=-20;
+    scene.add(circle9);
+    const cubegeometry9 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cube9 = new THREE.Mesh( cubegeometry9, material );
+    cube9.position.x=15;
+    cube9.position.y=3.8;
+    cube9.position.z=-20;
+    scene.add( cube9 );
+
+    
+
+    const cylGEOM10 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylinder10 = new THREE.Mesh( cylGEOM10,material );
+    cylinder10.name = "cylinder10";
+    cylinder10.position.x=-15;
+    cylinder10.position.y=-2;
+    cylinder10.position.z=-20;
+    scene.add(cylinder10);
+    const dayraGEOM10 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayra10 = new THREE.Mesh( dayraGEOM10, material );
+    dayra10.name = "dayra10";
+    dayra10.position.x=-15;
+    dayra10.position.y=-7;
+    dayra10.position.z=-20;
+    scene.add(dayra10);
+    const circleGEOM10 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circle10 = new THREE.Mesh( circleGEOM10, material );
+    circle10.name = "circle10";
+    circle10.position.x=-15;
+    circle10.position.y=3;
+    circle10.position.z=-20;
+    scene.add(circle10);
+    const cubegeometry10 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cube10 = new THREE.Mesh( cubegeometry10, material );
+    cube10.position.x=-15;
+    cube10.position.y=3.8;
+    cube10.position.z=-20;
+    scene.add( cube10 );
+
+
+
+
+    //front
+
+    const cylGEOM5 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylinder5 = new THREE.Mesh( cylGEOM5,material );
+    cylinder5.name = "cylinder5";
+    cylinder5.position.x=9;
+    cylinder5.position.y=-2;
+    scene.add(cylinder5);
+    const dayraGEOM5 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayra5 = new THREE.Mesh( dayraGEOM5, material );
+    dayra5.name = "dayra5";
+    dayra5.position.x=9;
+    dayra5.position.y=-7;
+    scene.add(dayra5);
+    const circleGEOM5 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circle5 = new THREE.Mesh( circleGEOM5, material );
+    circle5.name = "circle5";
+    circle5.position.x=9;
+    circle5.position.y=3;
+    scene.add(circle5);
+    const cubegeometry5 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cube5 = new THREE.Mesh( cubegeometry5, material );
+    cube5.position.x=9;
+    cube5.position.y=3.8;
+    scene.add( cube5 );
+
+
+
+
+    const cylGEOM6 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylinder6 = new THREE.Mesh( cylGEOM6, material );
+    cylinder6.name = "cylinder6";
+    cylinder6.position.x=3;
+    cylinder6.position.y=-2;
+    scene.add(cylinder6);
+    const dayraGEOM6 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayraMAT6 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const dayra6 = new THREE.Mesh( dayraGEOM6, material );
+    dayra6.name = "dayra6";
+    dayra6.position.x=3;
+    dayra6.position.y=-7;
+    scene.add(dayra6);
+    const circleGEOM6 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circleMAT6 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const circle6 = new THREE.Mesh( circleGEOM6, material );
+    circle6.name = "circle6";
+    circle6.position.x=3;
+    circle6.position.y=3;
+    scene.add(circle6);
+    const cubegeometry6 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cubematerial6 = new THREE.MeshBasicMaterial( {color: 0xA9957B} );
+    const cube6 = new THREE.Mesh( cubegeometry6, material );
+    cube6.position.x=3;
+    cube6.position.y=3.8;
+    scene.add( cube6 );
+
+
+
+
+    const cylGEOM7 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylMAT7 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const cylinder7 = new THREE.Mesh( cylGEOM7, material );
+    cylinder7.name = "cylinder7";
+    cylinder7.position.x=-3;
+    cylinder7.position.y=-2;
+    scene.add(cylinder7);
+    const dayraGEOM7 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayraMAT7 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const dayra7 = new THREE.Mesh( dayraGEOM7, material );
+    dayra7.name = "dayra7";
+    dayra7.position.x=-3;
+    dayra7.position.y=-7;
+    scene.add(dayra7);
+    const circleGEOM7 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circleMAT7 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const circle7 = new THREE.Mesh( circleGEOM7, material );
+    circle7.name = "circle7";
+    circle7.position.x=-3;
+    circle7.position.y=3;
+    scene.add(circle7);
+    const cubegeometry7 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cubematerial7 = new THREE.MeshBasicMaterial( {color: 0xA9957B} );
+    const cube7 = new THREE.Mesh( cubegeometry7, material );
+    cube7.position.x=-3;
+    cube7.position.y=3.8;
+    scene.add( cube7 );
+
+    
+
+
+
+    const cylGEOM8 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylMAT8 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const cylinder8 = new THREE.Mesh( cylGEOM8, material );
+    cylinder8.name = "cylinder8";
+    cylinder8.position.x=-9;
+    cylinder8.position.y=-2;
+    scene.add(cylinder8);
+    const dayraGEOM8 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayraMAT8 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const dayra8 = new THREE.Mesh( dayraGEOM8, material );
+    dayra8.name = "dayra8";
+    dayra8.position.x=-9;
+    dayra8.position.y=-7;
+    scene.add(dayra8);
+    const circleGEOM8 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circleMAT8 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const circle8 = new THREE.Mesh( circleGEOM8, material );
+    circle8.name = "circle8";
+    circle8.position.x=-9;
+    circle8.position.y=3;
+    scene.add(circle8);
+    const cubegeometry8 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cubematerial8 = new THREE.MeshBasicMaterial( {color: 0xA9957B} );
+    const cube8 = new THREE.Mesh( cubegeometry8, material );
+    cube8.position.x=-9;
+    cube8.position.y=3.8;
+    scene.add( cube8 );
+
+
+
+
+
+    const cylGEOM11 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylinder11 = new THREE.Mesh( cylGEOM11, material );
+    cylinder11.name = "cylinder11";
+    cylinder11.position.x=-15;
+    cylinder11.position.y=-2;
+   scene.add(cylinder11);
+   const dayraGEOM11 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayra11 = new THREE.Mesh( dayraGEOM11,material );
+    dayra11.name = "dayra11";
+    dayra11.position.x=-15;
+    dayra11.position.y=-7;
+    scene.add(dayra11);
+    const circleGEOM11 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circle11 = new THREE.Mesh( circleGEOM11, material );
+    circle11.name = "circle11";
+    circle11.position.x=-15;
+    circle11.position.y=3;
+    scene.add(circle11);
+    const cubegeometry11 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cube11 = new THREE.Mesh( cubegeometry11, material );
+    cube11.position.x=-15;
+    cube11.position.y=3.8;
+    scene.add( cube11 );
+
+
+   const cylGEOM12 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylinder12 = new THREE.Mesh( cylGEOM12, material );
+    cylinder12.name = "cylinder12";
+    cylinder12.position.x=15;
+    cylinder12.position.y=-2;
+    scene.add(cylinder12);
+    const dayraGEOM12 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayra12 = new THREE.Mesh( dayraGEOM12, material );
+    dayra12.name = "dayra12";
+    dayra12.position.x=15;
+    dayra12.position.y=-7;
+    scene.add(dayra12);
+    const circleGEOM12 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circle12 = new THREE.Mesh( circleGEOM12, material );
+    circle12.name = "circle12";
+    circle12.position.x=15;
+    circle12.position.y=3;
+    scene.add(circle12);
+    const cubegeometry12 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cube12 = new THREE.Mesh( cubegeometry12, material );
+    cube12.position.x=15;
+    cube12.position.y=3.8;
+    scene.add( cube12 );
+
+    // 3al ganb
+
+    const cylGEOM13 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylinder13 = new THREE.Mesh( cylGEOM13, material );
+    cylinder13.name = "cylinder13";
+    cylinder13.position.x=-15;
+    cylinder13.position.y=-2;
+    cylinder13.position.z=-5;
+    scene.add(cylinder13);
+    const dayraGEOM13 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayra13 = new THREE.Mesh( dayraGEOM13, material );
+    dayra13.name = "dayra13";
+    dayra13.position.x=-15;
+    dayra13.position.y=-7;
+    
+    scene.add(dayra13);
+    const circleGEOM13 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circle13 = new THREE.Mesh( circleGEOM13,material);
+    circle13.name = "circle13";
+    circle13.position.x=-15;
+    circle13.position.y=3;
+    circle13.position.z=-5;
+    scene.add(circle13);
+    const cubegeometry13 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cube13 = new THREE.Mesh( cubegeometry13, material );
+    cube13.position.x=-15;
+    cube13.position.y=3.8;
+    cube13.position.z=-5;
+    scene.add( cube13 );
+   
+    
+
+
+
+    const cylGEOM14 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylinder14 = new THREE.Mesh( cylGEOM14 ,material);
+    cylinder14.name = "cylinder14";
+    cylinder14.position.x=-15;
+    cylinder14.position.y=-2;
+    cylinder14.position.z=-10;
+    scene.add(cylinder14);
+    const dayraGEOM14 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayra14 = new THREE.Mesh( dayraGEOM14,material );
+    dayra14.name = "dayra14";
+    dayra14.position.x=-15;
+    dayra14.position.y=-7;
+    dayra14.position.z=-10;
+    scene.add(dayra14);
+    const circleGEOM14 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circle14 = new THREE.Mesh( circleGEOM14,material);
+    circle14.name = "circle14";
+    circle14.position.x=-15;
+    circle14.position.y=3;
+    circle14.position.z=-10;
+    scene.add(circle14);
+    const cubegeometry14 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cubematerial14 = new THREE.MeshBasicMaterial( {color: 0xA9957B} );
+    const cube14 = new THREE.Mesh( cubegeometry14,material );
+    cube14.position.x=-15;
+    cube14.position.y=3.8;
+    cube14.position.z=-10;
+    scene.add( cube14 );
+
+
+
+    const cylGEOM15 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylinder15 = new THREE.Mesh( cylGEOM15,material );
+    cylinder15.name = "cylinder15";
+    cylinder15.position.x=-15;
+    cylinder15.position.y=-2;
+    cylinder15.position.z=-15;
+    scene.add(cylinder15);
+    const dayraGEOM15 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayra15 = new THREE.Mesh( dayraGEOM15, material);
+    dayra15.name = "dayra15";
+    dayra15.position.x=-15;
+    dayra15.position.y=-7;
+    dayra15.position.z=-15;
+    scene.add(dayra15);
+    const circleGEOM15 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circle15 = new THREE.Mesh( circleGEOM15, material );
+    circle15.name = "circle15";
+    circle15.position.x=-15;
+    circle15.position.y=3;
+    circle15.position.z=-15;
+    scene.add(circle15);
+    const cubegeometry15 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cube15 = new THREE.Mesh( cubegeometry15, material );
+    cube15.position.x=-15;
+    cube15.position.y=3.8;
+    cube15.position.z=-15;
+    scene.add( cube15 );
+
+
+
+
+    const cylGEOM16 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylMAT16 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const cylinder16 = new THREE.Mesh( cylGEOM16,material );
+    cylinder16.name = "cylinder16";
+    cylinder16.position.x=15;
+    cylinder16.position.y=-2;
+    cylinder16.position.z=-5;
+    scene.add(cylinder16);
+    const dayraGEOM16 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayraMAT16 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const dayra16 = new THREE.Mesh( dayraGEOM16,material );
+    dayra16.name = "dayra16";
+    dayra16.position.x=15;
+    dayra16.position.y=-7;
+    dayra16.position.z=-5;
+    scene.add(dayra16);
+    const circleGEOM16 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circleMAT16 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const circle16 = new THREE.Mesh( circleGEOM14, material);
+    circle16.name = "circle16";
+    circle16.position.x=15;
+    circle16.position.y=3;
+    circle16.position.z=-5;
+    scene.add(circle16);
+    const cubegeometry16 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cubematerial16 = new THREE.MeshBasicMaterial( {color: 0xA9957B} );
+    const cube16 = new THREE.Mesh( cubegeometry16, material );
+    cube16.position.x=15;
+    cube16.position.y=3.8;
+    cube16.position.z=-5;
+    scene.add( cube16 );
+
+
+    const cylGEOM17 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylinder17 = new THREE.Mesh( cylGEOM17, material );
+    cylinder17.name = "cylinder17";
+    cylinder17.position.x=15;
+    cylinder17.position.y=-2;
+    cylinder17.position.z=-10;
+    scene.add(cylinder17);
+    const dayraGEOM17 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayra17 = new THREE.Mesh( dayraGEOM17, material );
+    dayra17.name = "dayra17";
+    dayra17.position.x=15;
+    dayra17.position.y=-7;
+    dayra17.position.z=-10;
+    scene.add(dayra17);
+    const circleGEOM17 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circleMAT17 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const circle17 = new THREE.Mesh( circleGEOM17, material );
+    circle17.name = "circle17";
+    circle17.position.x=15;
+    circle17.position.y=3;
+    circle17.position.z=-10;
+    scene.add(circle17);
+    const cubegeometry17 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cubematerial17 = new THREE.MeshBasicMaterial( {color: 0xA9957B} );
+    const cube17 = new THREE.Mesh( cubegeometry17, material );
+    cube17.position.x=15;
+    cube17.position.y=3.8;
+    cube17.position.z=-10;
+    scene.add( cube17 );
+
+
+    const cylGEOM18 = new THREE.CylinderGeometry(0.8, 0.8, 10, 30, 1);
+    const cylMAT18 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const cylinder18 = new THREE.Mesh( cylGEOM18,material );
+    cylinder18.name = "cylinder18";
+    cylinder18.position.x=15;
+    cylinder18.position.y=-2;
+    cylinder18.position.z=-15;
+    scene.add(cylinder18);
+    const dayraGEOM18 = new THREE.CylinderGeometry(1, 1, 0.4, 30, 1);
+    const dayraMAT18 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const dayra18 = new THREE.Mesh( dayraGEOM18,material);
+    dayra18.name = "dayra18";
+    dayra18.position.x=15;
+    dayra18.position.y=-7;
+    dayra18.position.z=-15;
+    scene.add(dayra18);
+    const circleGEOM18 = new THREE.CylinderGeometry(1.5, 1.5, 0.4, 30, 1);
+    const circleMAT18 = new THREE.MeshBasicMaterial( {color:0xe1c699} );
+    const circle18 = new THREE.Mesh( circleGEOM18,material );
+    circle18.name = "circle18";
+    circle18.position.x=15;
+    circle18.position.y=3;
+    circle18.position.z=-15;
+    scene.add(circle18);
+    const cubegeometry18 = new THREE.BoxGeometry( 1, 1.5, 1 );
+    const cubematerial18 = new THREE.MeshBasicMaterial( {color: 0xA9957B} );
+    const cube18 = new THREE.Mesh( cubegeometry18, material );
+    cube18.position.x=15;
+    cube18.position.y=3.8;
+    cube18.position.z=-15;
+    scene.add( cube18 );
+
+
+    const geometry1 = new THREE.BoxGeometry( 33, 1, 22 );
+const material1 = new THREE.MeshBasicMaterial( {color: 0xA9957B} );
+
+const stairs = new THREE.Mesh( geometry1, brick );
+stairs.name = "stairs";
+stairs.position.x=0;
+stairs.position.y=-7.5;
+stairs.position.z=-10;
+scene.add(stairs);
+
+const geometry2 = new THREE.BoxGeometry( 36, 1, 26 );
+const material2 = new THREE.MeshBasicMaterial( {color: 0xA9957B} );
+const stairs2 = new THREE.Mesh( geometry2, brick );
+stairs2.position.x=0;
+stairs2.position.y=-8.5;
+stairs2.position.z=-10;
+scene.add(stairs2);
+
+const geometry3 = new THREE.BoxGeometry( 39, 1, 29 );
+const material3 = new THREE.MeshBasicMaterial( {color: 0xA9957B} );
+const stairs3 = new THREE.Mesh( geometry3, brick );
+stairs3.position.x=0;
+stairs3.position.y=-9.5;
+stairs3.position.z=-10;
+scene.add(stairs3);
+
+
+const geometry4 = new THREE.BoxGeometry( 39, 1, 29 );
+const stairs4 = new THREE.Mesh( geometry4, tile );
+stairs4.position.x=0;
+stairs4.position.y=5;
+stairs4.position.z=-10;
+scene.add(stairs4);
+
+
+};
+
+
+    
+function animate()
+{
+    requestAnimationFrame(animate);  
+    renderer.render(scene,camera);
+    
+};
+
+
+function click(e){
+	//We create a 2D vector
+	vector = new THREE.Vector2();
+	//We set its position where the user clicked and we convert it to a number between -1 & 1
+	vector.set(
+		2 * (e.clientX / ww) - 1,
+		1 - 2 * (e.clientY / wh )
+	);
+
+	//We create a raycaster, which is some kind of laser going through your scene
+	raycaster = new THREE.Raycaster();
+	//We apply two parameters to the 'laser', its origin (where the user clicked) and the direction (what the camera 'sees')
+	raycaster.setFromCamera(vector,camera);
+
+	//We get all the objects the 'laser' find on its way (it returns an array containing the objects)
+	intersects = raycaster.intersectObjects(scene.children);
+
+	//If detect that we have at least 1 object
+	//The first object in the array is the closest to the camera
+	if(intersects.length > 0 ){
+geometry = new THREE.BoxGeometry(8,15,1);
+ texture = new THREE.TextureLoader().load( 'images/karnak.png' );
+				let gizamaterial = new THREE.MeshBasicMaterial( { map: texture } );
+sphere= new THREE.Mesh(geometry, gizamaterial);
+ sphere.position.x=-25;
+ sphere.position.y=-2;
+  //sphere.position.z=20;
+scene.add(sphere);
+		//We render our scene
+		renderer.render(scene,camera);
+	}
+};
+
+//Init our scene
+init();
+
+</script>
